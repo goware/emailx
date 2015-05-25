@@ -13,16 +13,16 @@
 import "github.com/goware/emailx"
 
 func main() {
-    err := emailx.Validate("My+Email@example.com")
+    err := emailx.Validate("My+Email@wrong.example.com")
     if err != nil {
-        fmt.Print("Email is not valid.")
+        fmt.Println("Email is not valid.")
 
         if err == emailx.ErrInvalidFormat {
-            fmt.Print("Wrong format.")
+            fmt.Println("Wrong format.")
         }
 
         if err == emailx.ErrUnresolvableHost {
-            fmt.Print("Unresolvable host.")
+            fmt.Println("Unresolvable host.")
         }
     }
 }
@@ -34,12 +34,7 @@ func main() {
 import "github.com/goware/emailx"
 
 func main() {
-    normalized, err := emailx.Normalize(" My+Email@example.com. ")
-    if err != nil {
-        // Handle error.
-    }
-
-    fmt.Print(normalized)
+    fmt.Print(emailx.Normalize(" My+Email@example.com. "))
     // Prints my+email@example.com
 }
 ```

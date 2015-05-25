@@ -46,16 +46,41 @@ func TestValidate(t *testing.T) {
 }
 
 func ExampleValidate() {
-	err := emailx.Validate("My+Email@example.com")
+	err := emailx.Validate("My+Email@wrong.example.com")
 	if err != nil {
-		fmt.Print("Email is not valid.")
+		fmt.Println("Email is not valid.")
 
 		if err == emailx.ErrInvalidFormat {
-			fmt.Print("Wrong format.")
+			fmt.Println("Wrong format.")
 		}
 
 		if err == emailx.ErrUnresolvableHost {
-			fmt.Print("Unresolvable host.")
+			fmt.Println("Unresolvable host.")
 		}
 	}
+	// Output:
+	// Email is not valid.
+	// Unresolvable host.
+}
+
+func TestNormalize(t *testing.T) {
+	tests := []struct {
+		in  string
+		out string
+	}{
+		{in: "email@EXAMPLE.COM. ", out: "email@example.com"},
+		{in: " Email+Me@example.com. ", out: "email+me@example.com"},
+	}
+
+	for _, tt := range tests {
+		normalized := emailx.Normalize(tt.in)
+		if normalized != tt.out {
+			t.Errorf(`%v: got "%v", want "%v"`, tt.in, normalized, tt.out)
+		}
+	}
+}
+
+func ExampleNormalize() {
+	fmt.Println(emailx.Normalize(" Email+Me@example.com. "))
+	// Output: email+me@example.com
 }

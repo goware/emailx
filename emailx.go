@@ -15,6 +15,7 @@ var (
 	hostRegexp = regexp.MustCompile("^[^\\s]+\\.[^\\s]+$")
 )
 
+// Validate checks format of a given email and resolves its host name.
 func Validate(email string) error {
 	at := strings.LastIndex(email, "@")
 	if at <= 0 || at > len(email)-3 {
@@ -34,4 +35,18 @@ func Validate(email string) error {
 	}
 
 	return nil
+}
+
+// Normalize normalizes email address.
+func Normalize(email string) string {
+	// Trim whitespaces.
+	email = strings.TrimSpace(email)
+
+	// Trim extra dot in hostname.
+	email = strings.TrimRight(email, ".")
+
+	// Lowercase.
+	email = strings.ToLower(email)
+
+	return email
 }
