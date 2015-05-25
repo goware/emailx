@@ -6,12 +6,24 @@
 
 ## Email validation
 
+- Simple email format check (not a complicated regexp, [this is why](http://davidcel.is/posts/stop-validating-email-addresses-with-regex/))
+- Resolve the host name
+
 ```go
 import "github.com/goware/emailx"
 
 func main() {
-    if !emailx.IsValid("My+Email@example.com") {
-        // Email is not valid!
+    err := emailx.Validate("My+Email@example.com")
+    if err != nil {
+        fmt.Print("Email is not valid.")
+
+        if err == emailx.ErrInvalidFormat {
+            fmt.Print("Wrong format.")
+        }
+
+        if err == emailx.ErrUnresolvableHost {
+            fmt.Print("Unresolvable host.")
+        }
     }
 }
 ```
