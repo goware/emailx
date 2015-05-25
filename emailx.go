@@ -17,6 +17,10 @@ var (
 
 // Validate checks format of a given email and resolves its host name.
 func Validate(email string) error {
+	if len(email) < 6 || len(email) > 254 {
+		return ErrInvalidFormat
+	}
+
 	at := strings.LastIndex(email, "@")
 	if at <= 0 || at > len(email)-3 {
 		return ErrInvalidFormat
@@ -24,6 +28,10 @@ func Validate(email string) error {
 
 	user := email[:at]
 	host := email[at+1:]
+
+	if len(user) > 64 {
+		return ErrInvalidFormat
+	}
 
 	if !userRegexp.MatchString(user) || !hostRegexp.MatchString(host) {
 		return ErrInvalidFormat
