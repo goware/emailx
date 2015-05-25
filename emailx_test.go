@@ -28,8 +28,10 @@ func TestValidate(t *testing.T) {
 		{in: "email+extra@wrong.example.com", err: true},
 
 		// Valid.
-		{in: "email@example.com"},
+		{in: "email@gmail.com"},
 		{in: "email+extra@example.com"},
+		{in: "EMAIL@aol.co.uk"},
+		{in: "EMAIL+EXTRA@aol.co.uk"},
 	}
 
 	for _, tt := range tests {

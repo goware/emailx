@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	ErrInvalidFormat    = errors.New("wrong email format")
-	ErrUnresolvableHost = errors.New("wrong email format")
+	ErrInvalidFormat    = errors.New("invalid format")
+	ErrUnresolvableHost = errors.New("unresolvable host")
 
 	userRegexp = regexp.MustCompile("^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~.-]+$")
 	hostRegexp = regexp.MustCompile("^[^\\s]+\\.[^\\s]+$")
