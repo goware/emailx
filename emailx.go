@@ -37,9 +37,12 @@ func Validate(email string) error {
 		return ErrInvalidFormat
 	}
 
-	_, err := net.ResolveIPAddr("ip", host)
-	if err != nil {
-		return ErrUnresolvableHost
+	if _, err := net.LookupMX(host); err != nil {
+		if _, err := net.LookupIP(host); err != nil {
+			// Only fail if both MX and A records are missing - any of the
+			// two is enough for an email to be deliverable
+			return ErrUnresolvableHost
+		}
 	}
 
 	return nil
