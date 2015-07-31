@@ -1,4 +1,4 @@
-# URLx
+# emailx
 [Golang](http://golang.org/) pkg for email validation and normalization.
 
 [![GoDoc](https://godoc.org/github.com/goware/emailx?status.png)](https://godoc.org/github.com/goware/emailx)
