@@ -48,6 +48,31 @@ func Validate(email string) error {
 	return nil
 }
 
+// ValidateFast checks format of a given email.
+func ValidateFast(email string) error {
+	if len(email) < 6 || len(email) > 254 {
+		return ErrInvalidFormat
+	}
+
+	at := strings.LastIndex(email, "@")
+	if at <= 0 || at > len(email)-3 {
+		return ErrInvalidFormat
+	}
+
+	user := email[:at]
+	host := email[at+1:]
+
+	if len(user) > 64 {
+		return ErrInvalidFormat
+	}
+
+	if !userRegexp.MatchString(user) || !hostRegexp.MatchString(host) {
+		return ErrInvalidFormat
+	}
+
+	return nil
+}
+
 // Normalize normalizes email address.
 func Normalize(email string) string {
 	// Trim whitespaces.
