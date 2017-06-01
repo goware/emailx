@@ -37,6 +37,11 @@ func Validate(email string) error {
 		return ErrInvalidFormat
 	}
 
+	switch host {
+	case "localhost", "example.com":
+		return nil
+	}
+
 	if _, err := net.LookupMX(host); err != nil {
 		if _, err := net.LookupIP(host); err != nil {
 			// Only fail if both MX and A records are missing - any of the
