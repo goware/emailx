@@ -18,6 +18,10 @@ func TestValidate(t *testing.T) {
 		{in: "email@", err: true},
 		{in: "email@x", err: true},
 		{in: "email@@example.com", err: true},
+		{in: ".email@example.com", err: true},
+		{in: "email.@example.com", err: true},
+		{in: "email..test@example.com", err: true},
+		{in: ".email..test.@example.com", err: true},
 		{in: "email@at@example.com", err: true},
 		{in: "some whitespace@example.com", err: true},
 		{in: "email@whitespace example.com", err: true},
@@ -29,6 +33,7 @@ func TestValidate(t *testing.T) {
 
 		// Valid.
 		{in: "email@gmail.com"},
+		{in: "email.email@gmail.com"},
 		{in: "email+extra@example.com"},
 		{in: "EMAIL@aol.co.uk"},
 		{in: "EMAIL+EXTRA@aol.co.uk"},
