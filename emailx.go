@@ -13,6 +13,9 @@ var (
 
 	userRegexp = regexp.MustCompile("^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~.-]+$")
 	hostRegexp = regexp.MustCompile("^[^\\s]+\\.[^\\s]+$")
+	// As per RFC 5332 secion 3.2.3: https://tools.ietf.org/html/rfc5322#section-3.2.3
+	// Dots are not allowed in the beginning, end or in occurances of more than 1 in the email address
+	userDotRegexp = regexp.MustCompile("(^[.]{1})|([.]{1}$)|([.]{2,})")
 )
 
 // Validate checks format of a given email and resolves its host name.
@@ -32,8 +35,7 @@ func Validate(email string) error {
 	if len(user) > 64 {
 		return ErrInvalidFormat
 	}
-
-	if !userRegexp.MatchString(user) || !hostRegexp.MatchString(host) {
+	if userDotRegexp.MatchString(user) || !userRegexp.MatchString(user) || !hostRegexp.MatchString(host) {
 		return ErrInvalidFormat
 	}
 
@@ -70,7 +72,6 @@ func ValidateFast(email string) error {
 	if len(user) > 64 {
 		return ErrInvalidFormat
 	}
-
 	if !userRegexp.MatchString(user) || !hostRegexp.MatchString(host) {
 		return ErrInvalidFormat
 	}
