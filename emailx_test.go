@@ -54,6 +54,50 @@ func TestValidate(t *testing.T) {
 	}
 }
 
+func TestValidateFast(t *testing.T) {
+	tests := []struct {
+		in  string
+		out string
+		err bool
+	}{
+		// Invalid format.
+		{in: "", err: true},
+		{in: "email@", err: true},
+		{in: "email@x", err: true},
+		{in: "email@@example.com", err: true},
+		{in: ".email@example.com", err: true},
+		{in: "email.@example.com", err: true},
+		{in: "email..test@example.com", err: true},
+		{in: ".email..test.@example.com", err: true},
+		{in: "email@at@example.com", err: true},
+		{in: "some whitespace@example.com", err: true},
+		{in: "email@whitespace example.com", err: true},
+		{in: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com", err: true},
+		{in: "email@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com", err: true},
+
+		// Valid.
+		{in: "email@gmail.com"},
+		{in: "email.email@gmail.com"},
+		{in: "email+extra@example.com"},
+		{in: "EMAIL@aol.co.uk"},
+		{in: "EMAIL+EXTRA@aol.co.uk"},
+	}
+
+	for _, tt := range tests {
+		err := emailx.ValidateFast(tt.in)
+		if err != nil {
+			if !tt.err {
+				t.Errorf(`"%s": unexpected error \"%v\"`, tt.in, err)
+			}
+			continue
+		}
+		if tt.err && err == nil {
+			t.Errorf(`"%s": expected error`, tt.in)
+			continue
+		}
+	}
+}
+
 func ExampleValidate() {
 	err := emailx.Validate("My+Email@wrong.example.com")
 	if err != nil {
