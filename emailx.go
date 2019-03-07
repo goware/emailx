@@ -8,7 +8,9 @@ import (
 )
 
 var (
-	ErrInvalidFormat    = errors.New("invalid format")
+	//ErrInvalidFormat returns when email's format is invalid
+	ErrInvalidFormat = errors.New("invalid format")
+	//ErrUnresolvableHost returns when validator couldn't resolve email's host
 	ErrUnresolvableHost = errors.New("unresolvable host")
 
 	userRegexp = regexp.MustCompile("^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~.-]+$")
@@ -72,7 +74,7 @@ func ValidateFast(email string) error {
 	if len(user) > 64 {
 		return ErrInvalidFormat
 	}
-	if !userRegexp.MatchString(user) || !hostRegexp.MatchString(host) {
+	if userDotRegexp.MatchString(user) || !userRegexp.MatchString(user) || !hostRegexp.MatchString(host) {
 		return ErrInvalidFormat
 	}
 
